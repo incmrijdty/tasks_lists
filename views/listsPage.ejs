@@ -1,0 +1,61 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title><%= headTitle %></title>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/main.css" />
+  </head>
+  <body>
+    <%- include('partials/navigation', { menuLinks, activeLinkPath }); %>
+    <main class="layout">
+
+      <aside class="sidebar">
+        <h2>Your Lists</h2>
+        <ul class="list_menu">
+          <% savedLists.forEach(list => { %>
+          <li><a href="/lists/<%= list.name %>"><%= list.name %></a></li>
+          <% }); %>
+        </ul>
+        <div id="modalOverlay" class="modal-overlay hidden">
+          <div class="modal-window">
+            <h2>Create New List</h2>
+            <form action="/lists/add" method="POST">
+              <input type="text" name="name" placeholder="List name" required />
+              <div style="margin-top: 1rem;">
+                <button class ="button" type="submit" class="button">Create</button>
+                <button type="button" class="button close-modal">Cancel</button> 
+              </div>
+            </form>
+          </div>
+        </div>
+        <button class="create_list_btn" id="openModalBtn">+ Create New List</button>
+      </aside>
+
+      <section class="content_area">
+        <h1 class="heading">Your lists</h1>
+      </section>
+    </main>
+    
+    <script>
+      const modal = document.getElementById('modalOverlay');
+      const openBtn = document.getElementById('openModalBtn');
+      const closeBtns = document.querySelectorAll('.close-modal');
+
+      openBtn.addEventListener('click', () => {
+        modal.classList.remove('hidden');
+      });
+
+      closeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          modal.classList.add('hidden');
+        });
+      });
+
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.add('hidden');
+        }
+      });
+    </script>
+  </body>
+</html>

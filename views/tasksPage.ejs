@@ -10,17 +10,19 @@
     <main class="layout">
 
       <aside class="sidebar">
-        <h2>Your Lists</h2>
-        <ul class="list_menu">
-          <% savedLists.forEach(list => { %>
-          <li><a href="/lists/<%= list.name %>"><%= list.name %></a></li>
+        <h2>Your Tasks</h2>
+        <ul class="task_menu">
+          <% savedTasks.forEach(task => { %>
+          <li><a href="/<%= task.id %>"><%= task.id %></a></li>
           <% }); %>
         </ul>
         <div id="modalOverlay" class="modal-overlay hidden">
           <div class="modal-window">
-            <h2>Create New List</h2>
-            <form action="/lists/add" method="POST">
-              <input type="text" name="name" placeholder="List name" required />
+            <h2>Create New Task</h2>
+            <form action="/add" method="POST">
+              <input type="text" id="id" placeholder="Task id" required />
+              <input type="text" content="content" placeholder="Task content" required />
+              
               <div style="margin-top: 1rem;">
                 <button class ="button" type="submit" class="button">Create</button>
                 <button type="button" class="button close-modal">Cancel</button> 
@@ -28,11 +30,11 @@
             </form>
           </div>
         </div>
-        <button class="create_list_btn" id="openModalBtn">+ Create New List</button>
+        <button class="create_task_btn" id="openModalBtn">+ Create New Task</button>
       </aside>
 
       <section class="content_area">
-        <h1 class="heading">Your lists</h1>
+        <h1 class="heading">Your Tasks</h1>
       </section>
     </main>
     
@@ -41,19 +43,19 @@
       const openBtn = document.getElementById('openModalBtn');
       const closeBtns = document.querySelectorAll('.close-modal');
 
-      openBtn.addEventListener('click', () => {
-        modal.classList.remove('hidden');
+      openBtn.addEventtaskener('click', () => {
+        modal.classTask.remove('hidden');
       });
 
       closeBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          modal.classList.add('hidden');
+        btn.addEventtaskener('click', () => {
+          modal.classTask.add('hidden');
         });
       });
 
-      modal.addEventListener('click', (e) => {
+      modal.addEventtaskener('click', (e) => {
         if (e.target === modal) {
-          modal.classList.add('hidden');
+          modal.classTask.add('hidden');
         }
       });
     </script>

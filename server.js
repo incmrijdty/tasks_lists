@@ -1,7 +1,6 @@
 const express = require("express");
 const { PORT } = require("./config");
-const bookRoutes = require("./routing/bookRouting");
-const listsRoutes = require("./routing/listsRouting");
+const tasksRoutes = require("./routing/tasksRouting");
 const logoutRoutes = require("./routing/logoutRouting");
 const killRoutes = require("./routing/killApplicationRouting");
 const getFileFromAbsolutePath = require("./utils/getFileFromAbsolutePath");
@@ -29,8 +28,7 @@ app.use((request, _response, next) => {
     next();
   });
 
-app.use("/", bookRoutes);
-app.use("/lists", listsRoutes); 
+app.use("/", tasksRoutes); 
 app.use("/logout", logoutRoutes);
 app.use("/kill", killRoutes);
 

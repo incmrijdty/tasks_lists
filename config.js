@@ -1,3 +1,3 @@
-const PORT = 3050;
+const PORT = 3010;
 
 module.exports = { PORT };

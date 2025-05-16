@@ -10,7 +10,6 @@ const LOGOUT_LINKS = [
   
 const MENU_LINKS = [
     HOME_LINK,
-    { label: "Lists", path: "/lists"} ,
     { label: "Logout", path: "/logout" },
 ];
   

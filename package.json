@@ -1,5 +1,5 @@
 {
-  "name": "book_lists_api",
+  "name": "tasks_lists_api",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
@@ -9,12 +9,24 @@
   "keywords": [],
   "author": "Alesia Sichova",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "axios": "^1.9.0",
     "body-parser": "^2.2.0",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "method-override": "^3.0.0"
-  }
+  },
+  "devDependencies": {
+    "webpack": "^5.99.8",
+    "webpack-cli": "^6.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/incmrijdty/assignments_lists.git"
+  },
+  "bugs": {
+    "url": "https://github.com/incmrijdty/assignments_lists/issues"
+  },
+  "homepage": "https://github.com/incmrijdty/assignments_lists#readme",
+  "description": ""
 }

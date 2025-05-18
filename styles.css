@@ -25,6 +25,7 @@ button {
   border-radius: 8px;
   box-shadow: 2px 2px 8px rgba(0,0,0,0.05);
   min-height: 180px;
+  display: inline-block;
 }
 
 .task-card p {
@@ -41,14 +42,18 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
 }
 
 .task-card button.toggle {
   background-color: #4caf50;
+  color: white;
 }
 
-.task-card button.delete {
+.delete-confirm button {
   background-color: #f44336;
+  color: white;
 }
 
 #taskList {
@@ -58,3 +63,21 @@ button {
   gap: 1rem;
   padding: 1rem 0;
 }
+
+.hidden {
+  display: none;
+}
+
+.edit-form input {
+  display: block;
+  margin: 0.5rem 0;
+  width: 100%;
+  padding: 0.3rem;
+  border: 1px solid #333;
+  background: #f0f0f0;
+}
+
+.edit-form button {
+  margin-right: 0.5rem;
+}
+

@@ -11,6 +11,22 @@
   <form id="taskForm">
     <input type="text" id="taskContent" placeholder="Task content" required />
     <input type="text" id="username" placeholder="Username" required />
+
+    <select id="category" required>
+      <option value="">Select category</option>
+      <option value="praca">Praca</option>
+      <option value="nauka">Nauka</option>
+      <option value="hobby">Hobby</option>
+      <option value="dom">Dom</option>
+    </select>
+
+    <select id="difficulty" required>
+      <option value="">Select difficulty</option>
+      <option value="low">Low</option>
+      <option value="medium">Medium</option>
+      <option value="hard">Hard</option>
+    </select>
+
     <button type="submit">Add Task</button>
   </form>
 

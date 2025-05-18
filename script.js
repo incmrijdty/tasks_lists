@@ -1,8 +1,10 @@
 class Task {
-  constructor(id, content, username, status = 'pending', createdAt = new Date()) {
+  constructor(id, content, username, difficulty, category, status = 'pending', createdAt = new Date()) {
     this.id = id;
     this.content = content;
     this.username = username;
+    this.difficulty = difficulty;
+    this.category = category;
     this.status = status;
     this.createdAt = createdAt;
   }
@@ -17,7 +19,7 @@ class Task {
 class TaskManager {
   constructor() {
     this.tasks = JSON.parse(localStorage.getItem('tasks') || '[]').map(
-      t => new Task(t.id, t.content, t.username, t.status, new Date(t.createdAt))
+      t => new Task(t.id, t.content, t.username, t.difficulty, t.category, t.status, new Date(t.createdAt))
     );
   }
 
@@ -25,9 +27,9 @@ class TaskManager {
     localStorage.setItem('tasks', JSON.stringify(this.tasks));
   }
 
-  addTask(content, username) {
+  addTask(content, username, difficulty, category) {
     const id = Date.now().toString();
-    const task = new Task(id, content, username);
+    const task = new Task(id, content, username, difficulty, category);
     this.tasks.push(task);
     this.save();
   }
@@ -49,11 +51,13 @@ class TaskManager {
     return this.tasks;
   }
 
-  updateTask(id, content, username) {
+  updateTask(id, content, username, difficulty, category) {
     const task = this.tasks.find(t => t.id === id);
     if (task) {
       task.content = content;
       task.username = username;
+      task.difficulty = difficulty;
+      task.category = category;
       this.save();
     }
   }
@@ -65,6 +69,8 @@ const taskList = document.getElementById('taskList');
 const form = document.getElementById('taskForm');
 const input = document.getElementById('taskContent');
 const userInput = document.getElementById('username');
+const categoryInput = document.getElementById('category');
+const difficultyInput = document.getElementById('difficulty');
 
 function renderTasks() {
   taskList.innerHTML = '';
@@ -76,6 +82,8 @@ function renderTasks() {
           <p><strong>ID:</strong> ${task.id}</p>
           <p><strong>Content:</strong> ${task.content}</p>
           <p><strong>User:</strong> ${task.username}</p>
+          <p><strong>Category:</strong> ${task.category}</p>
+          <p><strong>Difficulty:</strong> ${task.difficulty}</p>
           <p><strong>Status:</strong> <em>${task.status}</em></p>
         </div>
         <div class="buttons">
@@ -88,6 +96,18 @@ function renderTasks() {
         <form class="edit-form hidden" data-id="${task.id}">
           <input type="text" name="content" value="${task.content}" required />
           <input type="text" name="username" value="${task.username}" required />
+          <select name="category" required>
+            <option value="praca" ${task.category === 'praca' ? 'selected' : ''}>Praca</option>
+            <option value="nauka" ${task.category === 'nauka' ? 'selected' : ''}>Nauka</option>
+            <option value="hobby" ${task.category === 'hobby' ? 'selected' : ''}>Hobby</option>
+            <option value="dom" ${task.category === 'dom' ? 'selected' : ''}>Dom</option>
+          </select>
+
+          <select name="difficulty" required>
+            <option value="low" ${task.difficulty === 'low' ? 'selected' : ''}>Low</option>
+            <option value="medium" ${task.difficulty === 'medium' ? 'selected' : ''}>Medium</option>
+            <option value="hard" ${task.difficulty === 'hard' ? 'selected' : ''}>Hard</option>
+          </select>
           <button type="submit">Save</button>
           <button type="button" class="cancel-edit">Cancel</button>
         </form>
@@ -99,9 +119,11 @@ function renderTasks() {
 
 form.addEventListener('submit', e => {
   e.preventDefault();
-  manager.addTask(input.value, userInput.value);
+  manager.addTask(input.value, userInput.value, difficultyInput.value, categoryInput.value);
   input.value = '';
   userInput.value = '';
+  categoryInput.value = '';
+  difficultyInput.value = '';
   renderTasks();
 });
 
@@ -155,8 +177,10 @@ taskList.addEventListener('submit', e => {
     const id = e.target.dataset.id;
     const content = e.target.elements['content'].value.trim();
     const username = e.target.elements['username'].value.trim();
-    if (content && username) {
-      manager.updateTask(id, content, username);
+    const category = e.target.elements['category'].value;
+    const difficulty = e.target.elements['difficulty'].value;
+    if (content && username && category && difficulty) {
+      manager.updateTask(id, content, username, difficulty, category);
       renderTasks();
     }
   }

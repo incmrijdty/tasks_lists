@@ -72,6 +72,7 @@ const userInput = document.getElementById('username');
 const categoryInput = document.getElementById('category');
 const difficultyInput = document.getElementById('difficulty');
 const clearFilters = document.getElementById('clearFilters');
+const sortDate = document.getElementById('sortDate');
 
 function getCurrentFilters() {
   return {
@@ -84,6 +85,7 @@ function getCurrentFilters() {
 
 function renderTasks() {
   const filters = getCurrentFilters();
+  const sortOrder = document.getElementById('sortDate').value;
   taskList.innerHTML = '';
   manager.getAll()
     .filter(task => {
@@ -93,6 +95,13 @@ function renderTasks() {
         (!filters.difficulty || task.difficulty === filters.difficulty) &&
         (!filters.username || task.username.toLowerCase().includes(filters.username))
       );
+    })
+    .sort((a, b) => {
+      if (sortOrder === 'newest') {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      } else {
+        return new Date(a.createdAt) - new Date(b.createdAt);
+      }
     })
     .forEach(task => {
       const div = document.createElement('div');
@@ -138,19 +147,10 @@ function renderTasks() {
 }
 
 function resetFilters() {
-  document.getElementById('filterStatus').value = '';
-  document.getElementById('filterCategory').value = '';
-  document.getElementById('filterDifficulty').value = '';
-  document.getElementById('filterUsername').value = '';
+  ['filterStatus', 'filterCategory', 'filterDifficulty', 'filterUsername'].forEach(
+    id => document.getElementById(id).value = ''
+  );
 }
-
-
-['filterStatus', 'filterCategory', 'filterDifficulty'].forEach(id => {
-  document.getElementById(id).addEventListener('change', renderTasks);
-});
-
-document.getElementById('filterUsername').addEventListener('input', renderTasks);
-
 
 form.addEventListener('submit', e => {
   e.preventDefault();
@@ -221,9 +221,19 @@ taskList.addEventListener('submit', e => {
   }
 });
 
+
+['filterStatus', 'filterCategory', 'filterDifficulty'].forEach(id => {
+  document.getElementById(id).addEventListener('change', renderTasks);
+});
+
+document.getElementById('filterUsername').addEventListener('input', renderTasks);
+
+
 clearFilters.addEventListener('click', () => {
   resetFilters();
   renderTasks();
 });
+
+sortDate.addEventListener('change', renderTasks);
 
 renderTasks();

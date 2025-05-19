@@ -31,6 +31,32 @@
   </form>
 
   <h2>Tasks</h2>
+  <div id="filters">
+    <select id="filterStatus">
+      <option value="">All Statuses</option>
+      <option value="pending">Pending</option>
+      <option value="done">Done</option>
+    </select>
+
+    <select id="filterCategory">
+      <option value="">All Categories</option>
+      <option value="praca">Praca</option>
+      <option value="nauka">Nauka</option>
+      <option value="hobby">Hobby</option>
+      <option value="dom">Dom</option>
+    </select>
+
+    <select id="filterDifficulty">
+      <option value="">All Difficulties</option>
+      <option value="low">Low</option>
+      <option value="medium">Medium</option>
+      <option value="hard">Hard</option>
+    </select>
+
+    <input type="text" id="filterUsername" placeholder="Filter by username" />
+    <button id="clearFilters">Clear Filters</button>
+  </div>
+
   <div id="taskList"></div>
 
   <script src="script.js"></script>

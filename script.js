@@ -71,51 +71,86 @@ const input = document.getElementById('taskContent');
 const userInput = document.getElementById('username');
 const categoryInput = document.getElementById('category');
 const difficultyInput = document.getElementById('difficulty');
+const clearFilters = document.getElementById('clearFilters');
+
+function getCurrentFilters() {
+  return {
+    status: document.getElementById('filterStatus').value,
+    category: document.getElementById('filterCategory').value,
+    difficulty: document.getElementById('filterDifficulty').value,
+    username: document.getElementById('filterUsername').value.trim().toLowerCase()
+  };
+}
 
 function renderTasks() {
+  const filters = getCurrentFilters();
   taskList.innerHTML = '';
-  manager.getAll().forEach(task => {
-    const div = document.createElement('div');
-    div.innerHTML = `
-      <div class="task-card">
-        <div class="task-display">
-          <p><strong>ID:</strong> ${task.id}</p>
-          <p><strong>Content:</strong> ${task.content}</p>
-          <p><strong>User:</strong> ${task.username}</p>
-          <p><strong>Category:</strong> ${task.category}</p>
-          <p><strong>Difficulty:</strong> ${task.difficulty}</p>
-          <p><strong>Status:</strong> <em>${task.status}</em></p>
-        </div>
-        <div class="buttons">
-          <button data-id="${task.id}" class="toggle">✔ Mark as done/pending</button>
-          <form data-id="${task.id}" class="delete-confirm">
-            <button type="submit">🗑 Delete</button>
-          </form>
-          <button data-id="${task.id}" class="edit">Edit</button>
-        </div>
-        <form class="edit-form hidden" data-id="${task.id}">
-          <input type="text" name="content" value="${task.content}" required />
-          <input type="text" name="username" value="${task.username}" required />
-          <select name="category" required>
-            <option value="praca" ${task.category === 'praca' ? 'selected' : ''}>Praca</option>
-            <option value="nauka" ${task.category === 'nauka' ? 'selected' : ''}>Nauka</option>
-            <option value="hobby" ${task.category === 'hobby' ? 'selected' : ''}>Hobby</option>
-            <option value="dom" ${task.category === 'dom' ? 'selected' : ''}>Dom</option>
-          </select>
+  manager.getAll()
+    .filter(task => {
+      return (
+        (!filters.status || task.status === filters.status) &&
+        (!filters.category || task.category === filters.category) &&
+        (!filters.difficulty || task.difficulty === filters.difficulty) &&
+        (!filters.username || task.username.toLowerCase().includes(filters.username))
+      );
+    })
+    .forEach(task => {
+      const div = document.createElement('div');
+      div.innerHTML = `
+        <div class="task-card">
+          <div class="task-display">
+            <p><strong>ID:</strong> ${task.id}</p>
+            <p><strong>Content:</strong> ${task.content}</p>
+            <p><strong>User:</strong> ${task.username}</p>
+            <p><strong>Category:</strong> ${task.category}</p>
+            <p><strong>Difficulty:</strong> ${task.difficulty}</p>
+            <p><strong>Status:</strong> <em>${task.status}</em></p>
+          </div>
+          <div class="buttons">
+            <button data-id="${task.id}" class="toggle">Mark as done/pending</button>
+            <form data-id="${task.id}" class="delete-confirm">
+              <button type="submit">Delete</button>
+            </form>
+            <button data-id="${task.id}" class="edit">Edit</button>
+          </div>
+          <form class="edit-form hidden" data-id="${task.id}">
+            <input type="text" name="content" value="${task.content}" required />
+            <input type="text" name="username" value="${task.username}" required />
+            <select name="category" required>
+              <option value="praca" ${task.category === 'praca' ? 'selected' : ''}>Praca</option>
+              <option value="nauka" ${task.category === 'nauka' ? 'selected' : ''}>Nauka</option>
+              <option value="hobby" ${task.category === 'hobby' ? 'selected' : ''}>Hobby</option>
+              <option value="dom" ${task.category === 'dom' ? 'selected' : ''}>Dom</option>
+            </select>
 
-          <select name="difficulty" required>
-            <option value="low" ${task.difficulty === 'low' ? 'selected' : ''}>Low</option>
-            <option value="medium" ${task.difficulty === 'medium' ? 'selected' : ''}>Medium</option>
-            <option value="hard" ${task.difficulty === 'hard' ? 'selected' : ''}>Hard</option>
-          </select>
-          <button type="submit">Save</button>
-          <button type="button" class="cancel-edit">Cancel</button>
-        </form>
-      </div>
-    `;
-    taskList.appendChild(div);
-  });
+            <select name="difficulty" required>
+              <option value="low" ${task.difficulty === 'low' ? 'selected' : ''}>Low</option>
+              <option value="medium" ${task.difficulty === 'medium' ? 'selected' : ''}>Medium</option>
+              <option value="hard" ${task.difficulty === 'hard' ? 'selected' : ''}>Hard</option>
+            </select>
+            <button type="submit">Save</button>
+            <button type="button" class="cancel-edit">Cancel</button>
+          </form>
+        </div>
+      `;
+      taskList.appendChild(div);
+    });
 }
+
+function resetFilters() {
+  document.getElementById('filterStatus').value = '';
+  document.getElementById('filterCategory').value = '';
+  document.getElementById('filterDifficulty').value = '';
+  document.getElementById('filterUsername').value = '';
+}
+
+
+['filterStatus', 'filterCategory', 'filterDifficulty'].forEach(id => {
+  document.getElementById(id).addEventListener('change', renderTasks);
+});
+
+document.getElementById('filterUsername').addEventListener('input', renderTasks);
+
 
 form.addEventListener('submit', e => {
   e.preventDefault();
@@ -184,6 +219,11 @@ taskList.addEventListener('submit', e => {
       renderTasks();
     }
   }
+});
+
+clearFilters.addEventListener('click', () => {
+  resetFilters();
+  renderTasks();
 });
 
 renderTasks();
